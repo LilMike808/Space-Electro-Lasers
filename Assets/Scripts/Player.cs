@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
     private bool _isShieldsActive = false;
-    
+        
     [SerializeField]
     private GameObject _shieldVisualizer;
     [SerializeField]
@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
     private AudioClip _laserSoundClip;
     [SerializeField]
     private AudioSource _audioSource;
-
+    
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -72,7 +72,12 @@ public class Player : MonoBehaviour
         {
             FireLazer();
         }
+        
+        //left shift key increased thruster speed method
+        if (Input.GetKey(KeyCode.LeftShift)) _speed = 10f;
+        else _speed = 3.5f;      
     }
+   
     void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -91,7 +96,9 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(11, transform.position.y, 0);
         }
+       
     }
+
     void FireLazer()
     {
         _canFire = Time.time + _fireRate;
@@ -104,7 +111,8 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
         _audioSource.Play();
-    }
+    }       
+    
     public void Damage()
     {
        
