@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
 
     [SerializeField]
-    private float _speed = 3.5f;
+    private float _speed = 1.75f;
     [SerializeField]
     private float _speedMultiplier = 2;
     [SerializeField]
@@ -22,13 +22,17 @@ public class Player : MonoBehaviour
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
+    private int _shieldStrength;
+    SpriteRenderer _shieldColor;
     private bool _isShieldsActive = false;
-        
+    
     [SerializeField]
     private GameObject _shieldVisualizer;
+   
+    
     [SerializeField]
     private GameObject _leftEngine, _rightEngine;
-      
+
     [SerializeField]
     private int _score;
 
@@ -37,7 +41,7 @@ public class Player : MonoBehaviour
     private AudioClip _laserSoundClip;
     [SerializeField]
     private AudioSource _audioSource;
-    
+
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -53,7 +57,7 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("The UI Manager is NULL");
 
-            if(_audioSource == null)
+            if (_audioSource == null)
             {
                 Debug.LogError("AudioSource on the Player is NULL.");
             }
@@ -61,8 +65,9 @@ public class Player : MonoBehaviour
             {
                 _audioSource.clip = _laserSoundClip;
             }
-                   
-        }              
+
+        }
+        _shieldColor = _shieldVisualizer.GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -72,23 +77,20 @@ public class Player : MonoBehaviour
         {
             FireLazer();
         }
-        
-        //left shift key increased thruster speed method
-        if (Input.GetKey(KeyCode.LeftShift)) _speed = 10f;
-        else _speed = 3.5f;      
+       
     }
-   
+
     void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-
+        
         transform.Translate(Vector3.right * horizontalInput * _speed * Time.deltaTime);
         transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
 
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
 
-        if (transform.position.x > 11)
+        if(transform.position.x > 11)
         {
             transform.position = new Vector3(-11, transform.position.y, 0);
         }
@@ -96,7 +98,17 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(11, transform.position.y, 0);
         }
-       
+        
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            transform.Translate(Vector3.right * horizontalInput * (_speed * 1.5f) * 1.8f * Time.deltaTime);
+            transform.Translate(Vector3.up * verticalInput * (_speed * 1.5f) * 1.8f * Time.deltaTime);
+        }
+        else
+        {
+            transform.Translate(Vector3.right * horizontalInput * _speed * Time.deltaTime);
+            transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
+        }
     }
 
     void FireLazer()
@@ -111,19 +123,34 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
         _audioSource.Play();
-    }       
-    
+    }
+   
+
+
     public void Damage()
     {
-       
-        if (_isShieldsActive == true)
+        if(_isShieldsActive == true)
         {
-            _isShieldsActive = false;
-            _shieldVisualizer.SetActive(false);
-            return;
+            _shieldStrength--;
+            if (_shieldStrength == 0)
+            {
+                _isShieldsActive = false;
+                _shieldVisualizer.SetActive(false);
+                return;
+            }
+            else if (_shieldStrength == 1)
+            {
+                _shieldColor.color = Color.red;
+                return;
+            }
+            else if (_shieldStrength == 2)
+            {
+                _shieldColor.color = Color.green;
+                return;
+            }
+           
         }
-        _lives--;
-
+        _lives--;       
         if (_lives == 2)
         {
             _leftEngine.SetActive(true);
@@ -165,16 +192,37 @@ public class Player : MonoBehaviour
     }
     public void ShieldsActive()
     {
+        
         _isShieldsActive = true;
         _shieldVisualizer.SetActive(true);
+
+        if (_shieldStrength < 3)
+        {
+            _shieldStrength ++;
+            _isShieldsActive = true;
+            _shieldVisualizer.SetActive(true);
+        }
+        if (_shieldStrength == 1)
+        {
+            _shieldColor.color = Color.red;
+        }
+        else if (_shieldStrength == 2)
+        {
+            _shieldColor.color = Color.green;
+        }
+        else if (_shieldStrength ==3)
+        {
+            _shieldColor.color = Color.cyan;
+        }                
     }
     public void AddScore(int points)
     {
         _score += points;
         _uiManager.UpdateScore(_score);
     }
-    
-    
+ 
+
+   
 }
 
 
