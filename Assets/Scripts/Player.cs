@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
     [SerializeField]
+    private int _ammoCount = 15;
+    [SerializeField]
     private int _lives = 3;
     private SpawnManager _spawnManager;
 
@@ -68,6 +70,8 @@ public class Player : MonoBehaviour
 
         }
         _shieldColor = _shieldVisualizer.GetComponent<SpriteRenderer>();
+
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     void Update()
@@ -75,6 +79,10 @@ public class Player : MonoBehaviour
         CalculateMovement();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
+            if (_ammoCount == 0)
+            {
+                return;
+            }
             FireLazer();
         }
        
@@ -110,9 +118,24 @@ public class Player : MonoBehaviour
             transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
         }
     }
-
     void FireLazer()
     {
+        if(_ammoCount <= 15)
+        {
+            if (_isTripleShotActive == true)
+            {
+                Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+                _ammoCount = _ammoCount - 3;
+                _uiManager.UpdateAmmo(_ammoCount);
+            }
+            else
+            {
+                Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+                _ammoCount = _ammoCount - 1;
+                _uiManager.UpdateAmmo(_ammoCount);
+            }
+            AmmoCap();
+        }
         _canFire = Time.time + _fireRate;
         if (_isTripleShotActive == true)
         {
@@ -123,6 +146,14 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
         _audioSource.Play();
+    }
+
+    void AmmoCap()
+    {
+        if(_ammoCount <= 0)
+        {
+            _ammoCount = 0;
+        }
     }
    
 
