@@ -154,10 +154,18 @@ public class Player : MonoBehaviour
         {
             _ammoCount = 0;
         }
+        else if(_ammoCount > 15)
+        {
+            _ammoCount = 15;
+        }
     }
-   
-
-
+    
+    public void AmmoCollected()
+    {
+        _ammoCount = 15;
+        AmmoCap();
+        _uiManager.UpdateAmmo(_ammoCount);
+    }
     public void Damage()
     {
         if(_isShieldsActive == true)
@@ -198,6 +206,21 @@ public class Player : MonoBehaviour
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
+    }
+    public void HealthCollected()
+    {
+        _lives = _lives + 1;
+
+        if(_lives >= 3)
+        {
+            _lives = 3;
+            _leftEngine.SetActive(false);          
+        }
+        else if(_lives == 2)
+        {
+            _rightEngine.SetActive(false);
+        }
+        _uiManager.UpdateLives(_lives);
     }
     public void TripleShotActive()
     {
