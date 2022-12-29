@@ -297,11 +297,15 @@ MonoBehaviour:
   _fireRate: 0.15
   _ammoCount: 15
   _lives: 3
+  _missilePrefab: {fileID: 8417044192996120654, guid: 52caaca7224ad1f448370a4772ec910a, type: 3}
+  _missileCount: 3
+  _isHomingMissileActive: 0
   _shieldVisualizer: {fileID: 1642592418}
   _leftEngine: {fileID: 781324318}
   _rightEngine: {fileID: 1528967500}
   _score: 0
   _laserSoundClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  _noAmmoAudio: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
   _audioSource: {fileID: 0}
 --- !u!61 &467970203
 BoxCollider2D:
@@ -573,7 +577,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &576416178
 GameObject:
@@ -785,7 +789,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5b17a0088dcdf924fa92da5af1e1be07, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 9b13010872a1a794c9000cae57ad41fc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -902,7 +906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4227092101969865004, guid: 28dcf2b066ac32a44b8536ff4e0b1580, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4227092101969865004, guid: 28dcf2b066ac32a44b8536ff4e0b1580, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1324,8 +1328,9 @@ MonoBehaviour:
   - {fileID: 1621029485831215560, guid: 05189967b624ad142be54fc70dbc639e, type: 3}
   - {fileID: 5451917556915297223, guid: 746f7e28fe903f4469e1ee4e1cc60889, type: 3}
   - {fileID: 6408010304825089240, guid: 3f81d5f90c3b87a45b6ed6d4c1536311, type: 3}
-  - {fileID: 294280433854712338, guid: 3877e0412987cdc4487a7ff783ed5f77, type: 3}
-  - {fileID: 4155797000321039861, guid: 1641a1cd7d216384281288525c3eea60, type: 3}
+  - {fileID: 3312071364682983810, guid: 3877e0412987cdc4487a7ff783ed5f77, type: 3}
+  - {fileID: 2333640161649423991, guid: 1641a1cd7d216384281288525c3eea60, type: 3}
+  - {fileID: 709723043444512035, guid: 3f5bde6b90550174b8a729203ede0e77, type: 3}
 --- !u!4 &1439745969
 Transform:
   m_ObjectHideFlags: 0
@@ -1520,13 +1525,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1561043800}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.03824729, y: 0.91949445, z: -9.566041}
+  m_LocalScale: {x: 1.01, y: 1.01, z: 1.01}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0.384, z: 0}
 --- !u!114 &1561043804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1581,8 +1586,8 @@ MonoBehaviour:
       colorBlindnessType: 0
       colorBlindnessStrength: 1
   m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
-  m_ShowToolkit: 0
-  m_ShowCustomSorter: 0
+  m_ShowToolkit: 1
+  m_ShowCustomSorter: 1
   breakBeforeColorGrading: 0
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
@@ -2143,8 +2148,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2064617831}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.117, y: 0.3416, z: 0}
-  m_LocalScale: {x: 1.0778544, y: 1.2092885, z: 1}
+  m_LocalPosition: {x: -0.19, y: 0.485, z: 0}
+  m_LocalScale: {x: 1.0427581, y: 1.1277862, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5

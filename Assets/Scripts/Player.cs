@@ -24,6 +24,15 @@ public class Player : MonoBehaviour
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
+    
+    private bool _isRarePowerupActive = false;
+    [SerializeField]
+    private GameObject _missilePrefab;
+    [SerializeField]
+    private int _missileCount = 3;
+    [SerializeField]
+    private bool _isHomingMissileActive = false;
+
     private int _shieldStrength;
     SpriteRenderer _shieldColor;
     private bool _isShieldsActive = false;
@@ -41,6 +50,8 @@ public class Player : MonoBehaviour
     private UIManager _uiManager;
     [SerializeField]
     private AudioClip _laserSoundClip;
+    [SerializeField]
+    private AudioClip _noAmmoAudio;
     [SerializeField]
     private AudioSource _audioSource;
 
@@ -77,15 +88,19 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        if (_isRarePowerupActive != true)
         {
-            if (_ammoCount == 0)
+            if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
             {
-                return;
+                if (_ammoCount == 0)
+                {
+                    AudioSource.PlayClipAtPoint(_noAmmoAudio, transform.position);
+                    return;
+                }
+                FireLazer();
             }
-            FireLazer();
         }
-       
+        HomingMissileFire();
     }
 
     void CalculateMovement()
@@ -116,6 +131,20 @@ public class Player : MonoBehaviour
         {
             transform.Translate(Vector3.right * horizontalInput * _speed * Time.deltaTime);
             transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
+        }
+    }
+    void HomingMissileFire()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && _isHomingMissileActive == true)
+        {
+            Instantiate(_missilePrefab, transform.position, Quaternion.identity);
+            _missileCount = _missileCount - 1;
+
+            if (_missileCount == 0)
+            {
+                _isRarePowerupActive = false;
+                _isHomingMissileActive = false;
+            }
         }
     }
     void FireLazer()
@@ -159,6 +188,13 @@ public class Player : MonoBehaviour
             _ammoCount = 15;
         }
     }
+
+    public void HomingMissileActive()
+    {
+        _isRarePowerupActive = true;
+        _isHomingMissileActive = true;
+        _missileCount = 3;
+    }
     
     public void AmmoCollected()
     {
@@ -199,7 +235,10 @@ public class Player : MonoBehaviour
             _rightEngine.SetActive(true);
         }
 
-        _uiManager.UpdateLives(_lives);
+        if (_lives >= 0)
+        {
+            _uiManager.UpdateLives(_lives);
+        }
 
         if (_lives < 1)
         {
