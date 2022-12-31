@@ -87,8 +87,6 @@ public class Enemy : MonoBehaviour
         }
         if (other.tag == "Missile")
         {
-            Debug.Log("Missile Hit");
-
             Destroy(other.gameObject);
             if (_player != null)
             {
@@ -99,7 +97,6 @@ public class Enemy : MonoBehaviour
             _audioSource.Play();
             Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 2f);
-
         }
     }       
 }

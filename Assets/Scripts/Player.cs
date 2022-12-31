@@ -21,6 +21,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _lives = 3;
     private SpawnManager _spawnManager;
+    
+    //left shift thruster variables
+    [SerializeField]
+    private GameObject _thruster;
+    [SerializeField]
+    private float _fuelPercentage = 100f;
+    [SerializeField]
+    private float _refuelSpeed;
+    private bool _isThrusterActive;
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
@@ -39,8 +48,7 @@ public class Player : MonoBehaviour
     
     [SerializeField]
     private GameObject _shieldVisualizer;
-   
-    
+      
     [SerializeField]
     private GameObject _leftEngine, _rightEngine;
 
@@ -121,16 +129,54 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(11, transform.position.y, 0);
         }
-        
-        if (Input.GetKey(KeyCode.LeftShift))
+
+        if (Input.GetKey(KeyCode.LeftShift) && _fuelPercentage > 0)
         {
-            transform.Translate(Vector3.right * horizontalInput * (_speed * 1.5f) * 1.8f * Time.deltaTime);
-            transform.Translate(Vector3.up * verticalInput * (_speed * 1.5f) * 1.8f * Time.deltaTime);
+            if (_isSpeedBoostActive)
+            {
+                StopCoroutine(ActivateRefuel());
+                ActivateThruster();
+            }
+            else
+            {
+                StopCoroutine(ActivateRefuel());
+                ActivateThruster();
+                transform.Translate(Vector3.right * horizontalInput * (_speed * 1.5f) * 1.8f * Time.deltaTime);
+                transform.Translate(Vector3.up * verticalInput * (_speed * 1.5f) * 1.8f * Time.deltaTime);
+
+            }
         }
-        else
+        else if(Input.GetKeyUp(KeyCode.LeftShift))
         {
-            transform.Translate(Vector3.right * horizontalInput * _speed * Time.deltaTime);
-            transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
+            _isThrusterActive = false;
+            if (_isSpeedBoostActive)
+            {
+                _thruster.SetActive(false);
+                StartCoroutine(ActivateRefuel());
+            }
+            else
+            {
+                _thruster.SetActive(false);
+                StartCoroutine(ActivateRefuel());
+                transform.Translate(Vector3.right * horizontalInput * _speed * Time.deltaTime);
+                transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
+            }
+        }
+    }
+    void ActivateThruster()
+    {
+        _isThrusterActive = true;
+        if(_fuelPercentage > 0)
+        {
+            _thruster.SetActive(true);
+            _fuelPercentage -= 15 * 2 * Time.deltaTime;
+            _uiManager.UpdateThruster(_fuelPercentage);
+        }
+        else if(_fuelPercentage <= 0)
+        {
+            _thruster.SetActive(false);
+            _fuelPercentage = 0.0f;
+            _uiManager.UpdateThruster(_fuelPercentage);
         }
     }
     void HomingMissileFire()
@@ -313,9 +359,22 @@ public class Player : MonoBehaviour
         _score += points;
         _uiManager.UpdateScore(_score);
     }
- 
-
-   
+    IEnumerator ActivateRefuel()
+    {
+        while(_fuelPercentage != 100 && _isThrusterActive == false)
+        {
+            yield return new WaitForSeconds(0.1f);
+            _fuelPercentage += 30 * _refuelSpeed * Time.deltaTime;
+            _uiManager.UpdateThruster(_fuelPercentage);
+            
+            if(_fuelPercentage >= 100)
+            {
+                _fuelPercentage = 100;               
+                _uiManager.UpdateThruster(_fuelPercentage);
+                break;
+            }
+        }
+    }
 }
 
 

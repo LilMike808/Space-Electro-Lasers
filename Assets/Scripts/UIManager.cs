@@ -16,8 +16,13 @@ public class UIManager : MonoBehaviour
     private Text _restartText;
     [SerializeField]
     private Text _ammoText;
-
+    [SerializeField]
     private GameManager _gameManager;
+    [SerializeField]
+    
+    private Slider _thrusterSlider;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI _fuelPercentageText;
        
     [SerializeField]
     private Sprite[] _liveSprites;
@@ -55,6 +60,11 @@ public class UIManager : MonoBehaviour
         {
             GameOverSequence();                   
         }
+    }
+    public void UpdateThruster (float fuelpercentage)
+    {
+        _thrusterSlider.value = fuelpercentage;
+        _fuelPercentageText.text = Mathf.RoundToInt(fuelpercentage) + "%";
     }
     void GameOverSequence()
     {
