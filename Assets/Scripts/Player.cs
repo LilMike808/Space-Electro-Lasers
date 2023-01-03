@@ -369,7 +369,7 @@ public class Player : MonoBehaviour
     {
         while(_fuelPercentage != 100 && _isThrusterActive == false)
         {
-            yield return new WaitForSeconds(0.23f);
+            yield return new WaitForSeconds(1f);
             _fuelPercentage += 30 * _refuelSpeed * Time.deltaTime;
             _uiManager.UpdateThruster(_fuelPercentage);
             

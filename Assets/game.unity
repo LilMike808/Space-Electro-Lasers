@@ -1112,7 +1112,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9b13010872a1a794c9000cae57ad41fc, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5b17a0088dcdf924fa92da5af1e1be07, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1981,19 +1981,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1561043800}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 531a865efd79aba4fb1cb2dd82967b36, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d6fe0bdad2d5534788c8a0b2cfcf1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _newFOV: 58.5
+  _newFOV: 10
   _newXPos: 0.25
   _newYPos: 0.25
   _newRotation: 2
   _duration: 0.1
-  _originalFOV: 0
-  _originalPos: {x: 0, y: 0, z: 0}
-  _newPos: {x: 0, y: 0, z: 0}
-  _invertXYPos: {x: 0, y: 0, z: 0}
-  _newRot: {x: 0, y: 0, z: 0}
 --- !u!1 &1599992404
 GameObject:
   m_ObjectHideFlags: 0
