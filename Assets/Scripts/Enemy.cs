@@ -66,11 +66,12 @@ public class Enemy : MonoBehaviour
             if (player != null)
             {
                 player.Damage();
-            }
+            }          
             _anim.SetTrigger("OnEnemyDeath");
             _speed = 0;
             _audioSource.Play();
             Destroy(this.gameObject, 2f);
+            //if _speed = 0; do not damage Player
         }
         if (other.tag == "Laser")
         {

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
     [SerializeField]
     private float _speed = 1.75f;
     [SerializeField]
@@ -62,7 +61,8 @@ public class Player : MonoBehaviour
     private AudioClip _noAmmoAudio;
     [SerializeField]
     private AudioSource _audioSource;
-
+    //Camera shake reference
+    private CameraShake _camShake;
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -91,6 +91,13 @@ public class Player : MonoBehaviour
         _shieldColor = _shieldVisualizer.GetComponent<SpriteRenderer>();
 
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+        _camShake = Camera.main.GetComponent<CameraShake>();
+
+        if(_camShake is null)
+        {
+            Debug.LogError("Shake Camera script is NULL");
+        }
     }
 
     void Update()
@@ -229,12 +236,11 @@ public class Player : MonoBehaviour
         {
             _ammoCount = 0;
         }
-        else if(_ammoCount > 15)
+        else if(_ammoCount >= 15)
         {
             _ammoCount = 15;
         }
     }
-
     public void HomingMissileActive()
     {
         _isRarePowerupActive = true;
@@ -268,8 +274,7 @@ public class Player : MonoBehaviour
             {
                 _shieldColor.color = Color.green;
                 return;
-            }
-           
+            }          
         }
         _lives--;       
         if (_lives == 2)
@@ -285,12 +290,13 @@ public class Player : MonoBehaviour
         {
             _uiManager.UpdateLives(_lives);
         }
-
         if (_lives < 1)
         {
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
-        }
+        } 
+        
+        StartCoroutine(_camShake.ShakeCamera());
     }
     public void HealthCollected()
     {
@@ -363,7 +369,7 @@ public class Player : MonoBehaviour
     {
         while(_fuelPercentage != 100 && _isThrusterActive == false)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.23f);
             _fuelPercentage += 30 * _refuelSpeed * Time.deltaTime;
             _uiManager.UpdateThruster(_fuelPercentage);
             
@@ -373,6 +379,12 @@ public class Player : MonoBehaviour
                 _uiManager.UpdateThruster(_fuelPercentage);
                 break;
             }
+            else if(_fuelPercentage <= 0)
+            {
+                _fuelPercentage = 0;
+                _uiManager.UpdateThruster(_fuelPercentage);
+                break;
+            }            
         }
     }
 }

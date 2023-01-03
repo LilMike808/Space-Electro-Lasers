@@ -18,8 +18,9 @@ public class UIManager : MonoBehaviour
     private Text _ammoText;
     [SerializeField]
     private GameManager _gameManager;
-    [SerializeField]
     
+    //Slider AND percentage values to be assigned in the inspector
+    [SerializeField]   
     private Slider _thrusterSlider;
     [SerializeField]
     private TMPro.TextMeshProUGUI _fuelPercentageText;
